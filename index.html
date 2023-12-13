@@ -27,7 +27,7 @@
 
   <div style="font-size: 130%; padding-top: 30px; text-align: center;">Please Select your issue(s):</div>
 
-  <form action="Thanks.html">
+  <form>
     <label>
       <input type="checkbox" name="issue" id="issue1" value="Water leakage">
       Water Leakage
@@ -111,6 +111,87 @@
   </script>
 <!-- EMAIL END-->
 
+
+
+
+  <!-- FIRE BASE-->
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import {
+      initializeApp
+    } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-app.js";
+    import {
+      getDatabase,
+      ref,
+      set
+    } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-database.js";
+
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+  apiKey: "AIzaSyCaqG5Nz7xWfgIaJSDiD8RsVI1FbJ5qtzU",
+  authDomain: "qrcodeproject-f7140.firebaseapp.com",
+  projectId: "qrcodeproject-f7140",
+  storageBucket: "qrcodeproject-f7140.appspot.com",
+  messagingSenderId: "884871186798",
+  appId: "1:884871186798:web:d713232d8fa7792741597f",
+};
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+
+    const db = getDatabase();
+    let location = document.getElementById("location");
+
+    // Inserting data
+    function InsertData() {
+      const currentDate = new Date();
+
+     const selectedIssues = Array.from(document.querySelectorAll('input[name="issue"]:checked'));
+
+    // Extract the values of selected issues into an array
+    const issuesArray = selectedIssues.map(issue => issue.value);
+
+      set(ref(db, "TheUsers/" + location.value), {
+        Location: location.value,
+        Issues: issuesArray,
+        Date: currentDate.toLocaleDateString(),
+        Time: currentDate.toLocaleTimeString()
+      })
+        .then(() => {
+          alert("Report Sent")
+          window.location.href = 'Thanks.html'
+        })
+
+        .catch((error) => {
+          alert("Unsuccessful, error");
+        });
+    }
+
+    // Event listener for submit button
+    document.getElementById("submit").addEventListener('click', InsertData);
+
+  </script>
+<!-- FIRE BASE-->
+
+
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Get the URL parameters
+      const urlParams = new URLSearchParams(window.location.search);
+
+      // Get the 'location' parameter from the URL
+      const locationParam = urlParams.get('location');
+
+      // Set the location field value
+      const locationField = document.getElementById('location');
+      if (locationParam) {
+        locationField.value = locationParam;
+      }
+
+    });
+  </script>
 </body>
 
 </html>
